@@ -5,6 +5,7 @@ from senior_design.delivery_api import views
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
+# router.register(r'destinations_pending', views.get_pending_destination)
 router.register(r'destinations', views.DestinationViewSet)
 
 # Wire up our API using automatic URL routing.
