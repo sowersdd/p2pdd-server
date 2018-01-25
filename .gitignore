@@ -1,5 +1,5 @@
 env/*
-senior_design/db.sqlite3
+db.sqlite3
 senior_design/__pycache__/*
 senior_design/delivery_api/__pycache__/*
 senior_design/delivery_api/migrations/__pycache__/*
