@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User, Group
-from senior_design.delivery_api.models import Destination
+from senior_design.delivery_api.models import Destination, DestinationProgress
 from rest_framework import serializers
 
 
@@ -19,3 +19,9 @@ class DestinationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Destination
         fields = ('id', 'lat', 'lon', 'pending', 'created')
+
+
+class DestinationProgressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DestinationProgress
+        fields = ('id', 'current_lat', 'current_lon', 'destination_id', 'created')
