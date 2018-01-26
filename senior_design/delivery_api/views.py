@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User, Group
+from django.http import HttpResponse, JsonResponse
 from senior_design.delivery_api.models import Destination
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route
@@ -26,7 +27,16 @@ class DestinationViewSet(viewsets.ModelViewSet):
 	queryset = Destination.objects.all()
 	serializer_class = DestinationSerializer
 
-def get_pending_destination(self, request, pk=None):
-	queryset = Destination.objects.filter(pending=True).order_by('created')[0]
-	serializer = DestinationSerializer(destination)
-	return Response(serializer.data)
+def get_pending_destination(request, pk=None):
+	if request.method == "GET":
+		destination = Destination.objects.filter(pending=True).order_by('created')
+		if len(destination) > 0:
+			destination = destination[0]
+			destination.pending = False
+			serializer = DestinationSerializer(destination)
+			destination.save()
+			return JsonResponse(serializer.data)
+		else:
+			return HttpResponse(status=418)
+	else:
+		return HttpResponse(status=400)
