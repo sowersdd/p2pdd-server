@@ -3,8 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from senior_design.delivery_api.models import Destination, DestinationProgress
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route
-from senior_design.delivery_api.serializers import UserSerializer, GroupSerializer, DestinationSerializer, DestinationProgressSerializer
-
+from senior_design.delivery_api.serializers import UserSerializer, GroupSerializer, DestinationSerializer, DestinationProgressSerializer, DestinationAddressSerializer
 
 class UserViewSet(viewsets.ModelViewSet):
 	"""
@@ -39,7 +38,7 @@ def get_pending_destination(request, pk=None):
 		destination = Destination.objects.filter(pending=True).order_by('created')
 		if len(destination) > 0:
 			destination = destination[0]
-			destination.pending = False
+			destination.needs_approval = True
 			serializer = DestinationSerializer(destination)
 			destination.save()
 			return JsonResponse(serializer.data)
@@ -54,6 +53,32 @@ def get_destination_progress(request, pk=None):
 		if len(progress) > 0:
 			progress = progress[0]
 			serializer = DestinationProgressSerializer(progress)
+			return JsonResponse(serializer.data)
+		else:
+			return HttpResponse(status=418)
+	else:
+		return HttpResponse(status=400)
+
+def get_approval(request, pk=None):
+	if request.method == "GET":
+		dest = Destination.objects.filter(needs_approval=True).order_by('-created')
+		if len(dest) > 0:
+			dest = dest[0]
+			serializer = DestinationAddressSerializer(dest)
+			return JsonResponse(serializer.data)
+		else:
+			return HttpResponse(status=418)
+	else:
+		return HttpResponse(status=400)
+
+def submit_approval(request, pk=None):
+	if request.method == "GET":
+		dest = Destination.objects.filter(id=pk).order_by('-created')
+		if len(dest) > 0:
+			dest = dest[0]
+			dest.needs_approval = False
+			dest.pending = False
+			serializer = DestinationSerializer(dest)
 			return JsonResponse(serializer.data)
 		else:
 			return HttpResponse(status=418)

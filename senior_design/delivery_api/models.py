@@ -7,6 +7,7 @@ class Destination(models.Model):
 	pending = models.BooleanField(default=True)
 	lat = models.CharField(max_length=50)
 	lon = models.CharField(max_length=50)
+	needs_approval = models.BooleanField(default=False)
 
 	class Meta:
 	    ordering = ('created', )

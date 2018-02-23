@@ -13,6 +13,8 @@ router.register(r'destination_progresses', views.DestinationProgressViewSet)
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
 	url(r'destinations/pending', views.get_pending_destination),
+	url(r'destinations/approval', views.get_approval),
+	url(r'destinations/(?P<pk>[0-9]+)/approval', views.submit_approval),
 	url(r'destinations/(?P<pk>[0-9]+)/progress', views.get_destination_progress),
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
