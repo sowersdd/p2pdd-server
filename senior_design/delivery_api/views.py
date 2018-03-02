@@ -79,6 +79,7 @@ def submit_approval(request, pk=None):
 			dest.needs_approval = False
 			dest.pending = False
 			serializer = DestinationSerializer(dest)
+			dest.save()
 			return JsonResponse(serializer.data)
 		else:
 			return HttpResponse(status=418)
